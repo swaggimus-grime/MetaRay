@@ -1,5 +1,4 @@
-#ifndef RAY_H
-#define RAY_H
+#pragma once
 
 #include <glm/glm.hpp>
 
@@ -11,5 +10,3 @@ struct ray {
 		return origin + t * direction;
 	}
 };
-
-#endif
