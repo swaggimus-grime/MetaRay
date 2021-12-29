@@ -33,7 +33,7 @@
     <ClInclude Include="src\Ray.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\vec3util.h">
+    <ClInclude Include="src\Vec3.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="vendor\glm\glm\common.hpp">
@@ -1288,5 +1288,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Shapes.cpp" />
+    <ClCompile Include="src\Hittable.cpp" />
   </ItemGroup>
 </Project>

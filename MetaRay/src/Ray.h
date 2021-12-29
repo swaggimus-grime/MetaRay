@@ -1,12 +1,13 @@
 #pragma once
 
+#include "Vec3.h"
 #include <glm/glm.hpp>
 
 struct ray {
-	glm::vec3 origin;
-	glm::vec3 direction;
+	vec3 origin;
+	vec3 direction;
 
-	glm::vec3 at(float t) const {
+	vec3 at(float t) const {
 		return origin + t * direction;
 	}
 };

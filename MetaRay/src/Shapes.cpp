@@ -1,9 +1,7 @@
 #include "Shapes.h"
-#include "vec3util.h"
+#include "Vec3.h"
 
-using glm::vec3;
-
-Sphere::Sphere(const glm::vec3& center, double radius)
+Sphere::Sphere(const vec3& center, double radius)
 	:m_Center(center), m_Radius(radius)
 {
 }
@@ -11,9 +9,9 @@ Sphere::Sphere(const glm::vec3& center, double radius)
 bool Sphere::hit(const ray& r, double t_min, double t_max, hit_record& rec) const
 {
     vec3 oc = r.origin - m_Center;
-    auto a = lensqr(r.direction);
-    auto half_b = glm::dot(oc, r.direction);
-    auto c = lensqr(oc) - pow(m_Radius, 2);
+    auto a = r.direction.lensqr();
+    float half_b = oc.dot(r.direction);
+    float c = oc.lensqr() - pow(m_Radius, 2);
 
     auto discriminant = half_b * half_b - a * c;
     if (discriminant < 0) return false;
@@ -29,7 +27,8 @@ bool Sphere::hit(const ray& r, double t_min, double t_max, hit_record& rec) cons
 
     rec.t = root;
     rec.p = r.at(rec.t);
-    rec.normal = (rec.p - m_Center) / m_Radius;
+    vec3 outward_normal = (rec.p - m_Center) / static_cast<float>(m_Radius);
+    rec.set_face_normal(r, outward_normal);
 
     return true;
 }

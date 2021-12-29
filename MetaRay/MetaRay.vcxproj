@@ -92,7 +92,7 @@
     <ClInclude Include="src\Hittable.h" />
     <ClInclude Include="src\Ray.h" />
     <ClInclude Include="src\Shapes.h" />
-    <ClInclude Include="src\vec3util.h" />
+    <ClInclude Include="src\Vec3.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_fixes.hpp" />
@@ -510,6 +510,7 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Hittable.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Shapes.cpp" />
   </ItemGroup>
