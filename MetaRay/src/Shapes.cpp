@@ -1,12 +1,12 @@
 #include "Shapes.h"
 #include "Vec3.h"
 
-Sphere::Sphere(const vec3& center, double radius)
+Sphere::Sphere(const vec3& center, float radius)
 	:m_Center(center), m_Radius(radius)
 {
 }
 
-bool Sphere::hit(const ray& r, double t_min, double t_max, hit_record& rec) const
+bool Sphere::hit(const ray& r, float t_min, float t_max, hit_record& rec) const
 {
     vec3 oc = r.origin - m_Center;
     auto a = r.direction.lensqr();
@@ -27,7 +27,7 @@ bool Sphere::hit(const ray& r, double t_min, double t_max, hit_record& rec) cons
 
     rec.t = root;
     rec.p = r.at(rec.t);
-    vec3 outward_normal = (rec.p - m_Center) / static_cast<float>(m_Radius);
+    vec3 outward_normal = (rec.p - m_Center) / m_Radius;
     rec.set_face_normal(r, outward_normal);
 
     return true;

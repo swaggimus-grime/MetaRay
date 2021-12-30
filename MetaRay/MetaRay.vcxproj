@@ -89,6 +89,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Hittable.h" />
     <ClInclude Include="src\Ray.h" />
     <ClInclude Include="src\Shapes.h" />
