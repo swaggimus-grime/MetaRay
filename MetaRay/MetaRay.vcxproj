@@ -91,6 +91,7 @@
   <ItemGroup>
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Hittable.h" />
+    <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\Ray.h" />
     <ClInclude Include="src\Shapes.h" />
     <ClInclude Include="src\Vec3.h" />

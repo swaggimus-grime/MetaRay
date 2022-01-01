@@ -1,8 +1,8 @@
 #include "Shapes.h"
 #include "Vec3.h"
 
-Sphere::Sphere(const vec3& center, float radius)
-	:m_Center(center), m_Radius(radius)
+Sphere::Sphere(const vec3& center, float radius, std::shared_ptr<Material> mat)
+	:m_Center(center), m_Radius(radius), m_Mat(mat)
 {
 }
 
@@ -29,6 +29,7 @@ bool Sphere::hit(const ray& r, float t_min, float t_max, hit_record& rec) const
     rec.p = r.at(rec.t);
     vec3 outward_normal = (rec.p - m_Center) / m_Radius;
     rec.set_face_normal(r, outward_normal);
+    rec.mat = m_Mat;
 
     return true;
 }
