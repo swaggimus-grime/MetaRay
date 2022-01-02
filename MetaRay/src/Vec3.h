@@ -2,9 +2,7 @@
 
 #include <glm/glm.hpp>
 #include <cmath>
-
-extern float random_float();
-extern float random_float(float min, float max);
+#include "RandomUtil.h"
 
 class vec3 : public glm::vec3 {
 public:
@@ -15,23 +13,32 @@ public:
 	inline float len() const { return glm::length(static_cast<glm::vec3>(*this)); }
 	inline float lensqr() const { return (float)pow(len(), 2); }
 	inline float dot(const vec3& other) const { return glm::dot(static_cast<glm::vec3>(*this), other); }
+	inline vec3 cross(const vec3& other) const { return glm::cross(*this, other); }
 	inline vec3 unit() const { return glm::normalize(*this); }
 
 	inline static vec3 random() {
-		return vec3(random_float(), random_float(), random_float());
+		return vec3(Random::Float(), Random::Float(), Random::Float());
 	}
 
 	inline static vec3 random(float min, float max) {
-		return vec3(random_float(min, max), random_float(min, max), random_float(min, max));
+		return vec3(Random::Float(min, max), Random::Float(min, max), Random::Float(min, max));
 	}
 
 	inline static vec3 random_unit() {
-		return glm::normalize(vec3(random_float(), random_float(), random_float()));
+		return glm::normalize(vec3(Random::Float(), Random::Float(), Random::Float()));
 	}
 
 	static vec3 random_in_unit_sphere() {
 		while (true) {
 			auto p = vec3::random(-1, 1);
+			if (p.lensqr() >= 1) continue;
+			return p;
+		}
+	}
+
+	static vec3 random_in_unit_disk() {
+		while (true) {
+			auto p = vec3(Random::Float(-1, 1), Random::Float(-1, 1), 0);
 			if (p.lensqr() >= 1) continue;
 			return p;
 		}

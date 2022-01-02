@@ -8,20 +8,11 @@
 #include <random>
 #include "Material.h"
 
+using std::make_shared;
+using std::shared_ptr;
+
 #define SAMPLES_PER_PIXEL 4
 #define INF std::numeric_limits<float>::infinity()
-
-inline float random_float() {
-    static std::uniform_real_distribution<float> distribution(0.f, 1.f);
-    static std::mt19937 generator;
-    return distribution(generator);
-}
-
-inline float random_float(float min, float max) {
-    static std::uniform_real_distribution<float> distribution(min, max);
-    static std::mt19937 generator;
-    return distribution(generator);
-}
 
 float hit_sphere(const vec3& center, float radius, const ray& r) {
     vec3 oc = r.origin - center;
@@ -79,31 +70,77 @@ void write_color(std::ostream& out, vec3 pixel_color) {
         << static_cast<int>(256 * glm::clamp(b, 0.f, 0.999f)) << '\n';
 }
 
+HitList random_scene() {
+    HitList world;
+
+    auto ground_material = make_shared<Diffuse>(color(0.5, 0.5, 0.5));
+    world.add(make_shared<Sphere>(point3(0, -1000, 0), 1000, ground_material));
+
+    for (int a = -11; a < 11; a++) {
+        for (int b = -11; b < 11; b++) {
+            auto choose_mat = Random::Float();
+            point3 center(a + 0.9 * Random::Float(), 0.2, b + 0.9 * Random::Float());
+
+            if ((center - point3(4, 0.2, 0)).length() > 0.9) {
+                shared_ptr<Material> sphere_material;
+
+                if (choose_mat < 0.8) {
+                    // diffuse
+                    auto albedo = color::random() * color::random();
+                    sphere_material = make_shared<Diffuse>(albedo);
+                    world.add(make_shared<Sphere>(center, 0.2, sphere_material));
+                }
+                else if (choose_mat < 0.95) {
+                    // metal
+                    auto albedo = color::random(0.5, 1);
+                    auto fuzz = Random::Float(0, 0.5);
+                    sphere_material = make_shared<Metal>(albedo, fuzz);
+                    world.add(make_shared<Sphere>(center, 0.2, sphere_material));
+                }
+                else {
+                    // glass
+                    sphere_material = make_shared<Dielectric>(1.5);
+                    world.add(make_shared<Sphere>(center, 0.2, sphere_material));
+                }
+            }
+        }
+    }
+
+    auto material1 = make_shared<Dielectric>(1.5);
+    world.add(make_shared<Sphere>(point3(0, 1, 0), 1.0, material1));
+
+    auto material2 = make_shared<Diffuse>(color(0.4, 0.2, 0.1));
+    world.add(make_shared<Sphere>(point3(-4, 1, 0), 1.0, material2));
+
+    auto material3 = make_shared<Metal>(color(0.7, 0.6, 0.5), 0.0);
+    world.add(make_shared<Sphere>(point3(4, 1, 0), 1.0, material3));
+
+    return world;
+}
+
 int main() {
 
     // Image
-    const auto aspect_ratio = 16.0 / 9.0;
-    const int image_width = 400;
+
+    const auto aspect_ratio = 3.0 / 2.0;
+    const int image_width = 1200;
     const int image_height = static_cast<int>(image_width / aspect_ratio);
-    const unsigned int max_depth = 50;
+    const int samples_per_pixel = 500;
+    const int max_depth = 50;
 
-    using std::make_shared;
     // World
-    HitList world;
-    
-    auto material_ground = make_shared<Diffuse>(color(0.8, 0.8, 0.0));
-    auto material_center = make_shared<Diffuse>(color(0.1, 0.2, 0.5));
-    auto material_left = make_shared<Dielectric>(1.5);
-    auto material_right = make_shared<Metal>(color(0.8, 0.6, 0.2), 0.0);
 
-    world.add(make_shared<Sphere>(point3(0.0, -100.5, -1.0), 100.0, material_ground));
-    world.add(make_shared<Sphere>(point3(0.0, 0.0, -1.0), 0.5, material_center));
-    world.add(make_shared<Sphere>(point3(-1.0, 0.0, -1.0), 0.5, material_left));
-    world.add(make_shared<Sphere>(point3(-1.0, 0.0, -1.0), -0.4, material_left));
-    world.add(make_shared<Sphere>(point3(1.0, 0.0, -1.0), 0.5, material_right));
+    auto world = random_scene();
 
     // Camera
-    Camera cam(vec3(0.f, 0.f, 0.f), 16.f / 9);
+
+    point3 lookfrom(13, 2, 3);
+    point3 lookat(0, 0, 0);
+    vec3 vup(0, 1, 0);
+    auto dist_to_focus = 10.0;
+    auto aperture = 0.1;
+
+    Camera cam(lookfrom, lookat, vup, 20, aspect_ratio, aperture, dist_to_focus);
 
     // Render
 
@@ -114,8 +151,8 @@ int main() {
         for (int i = 0; i < image_width; ++i) {
             color pixel_color(0.f, 0.f, 0.f);
             for (int s = 0; s < SAMPLES_PER_PIXEL; ++s) {
-                float u = (i + random_float()) / (image_width - 1);
-                float v = (j + random_float()) / (image_height - 1);
+                float u = (i + Random::Float()) / (image_width - 1);
+                float v = (j + Random::Float()) / (image_height - 1);
                 ray r = cam.GetRay(u, v);
                 pixel_color += static_cast<glm::vec3>(ray_color(r, world, max_depth));
             }
