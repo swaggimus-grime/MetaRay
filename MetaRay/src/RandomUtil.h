@@ -1,5 +1,7 @@
 #pragma once
 
+#include <random>
+
 class Random {
 public:
     static inline float Float() {

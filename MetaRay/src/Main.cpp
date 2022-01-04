@@ -5,7 +5,6 @@
 #include "Hittable.h"
 #include "Shapes.h"
 #include "Camera.h"
-#include <random>
 #include "Material.h"
 
 using std::make_shared;
@@ -38,7 +37,7 @@ vec3 random_in_hemisphere(const vec3& normal) {
 
 color ray_color(const ray& r, const Hittable& hitObj, unsigned int depth) {
     if (depth <= 0)
-        return color(0, 0, 0);
+        return color(0.f, 0.f, 0.f);
 
     hit_record rec;
     if (hitObj.hit(r, 0.001f, INF, rec)) {
@@ -50,7 +49,7 @@ color ray_color(const ray& r, const Hittable& hitObj, unsigned int depth) {
     }
     vec3 unit_direction = glm::normalize(r.direction);
     float t = 0.5f * (unit_direction.y + 1.f);
-    return (1.f - t) * vec3(1.f, 1.f, 1.f) + t * vec3(0.5f, 0.7f, 1.f);
+    return (1.f - t) * color(1.f, 1.f, 1.f) + t * color(0.5f, 0.7f, 1.f);
 }
 
 void write_color(std::ostream& out, vec3 pixel_color) {
@@ -149,12 +148,12 @@ int main() {
     for (int j = image_height - 1; j >= 0; --j) {
         std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
         for (int i = 0; i < image_width; ++i) {
-            color pixel_color(0.f, 0.f, 0.f);
+            color pixel_color;
             for (int s = 0; s < SAMPLES_PER_PIXEL; ++s) {
                 float u = (i + Random::Float()) / (image_width - 1);
                 float v = (j + Random::Float()) / (image_height - 1);
-                ray r = cam.GetRay(u, v);
-                pixel_color += static_cast<glm::vec3>(ray_color(r, world, max_depth));
+                ray r = cam.LookAt(u, v);
+                pixel_color = ray_color(r, world, max_depth);
             }
             write_color(std::cout, pixel_color);
         }

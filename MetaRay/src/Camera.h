@@ -23,7 +23,7 @@ public:
         m_LensRadius = aperture / 2.f;
     }
 
-    ray GetRay(float s, float t) const {
+    ray LookAt(float s, float t) const {
         vec3 rd = m_LensRadius * vec3::random_in_unit_disk();
         vec3 offset = m_U * rd.x + m_V * rd.y;
 
