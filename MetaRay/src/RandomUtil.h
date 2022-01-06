@@ -1,4 +1,5 @@
-#pragma once
+#ifndef RANDOM_UTIL_H
+#define RANDOM_UTIL_H 
 
 #include <random>
 
@@ -16,3 +17,5 @@ public:
         return distribution(generator);
     }
 };
+
+#endif

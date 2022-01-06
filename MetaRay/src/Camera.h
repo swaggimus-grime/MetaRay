@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CAMERA_H
+#define CAMERA_H 
 
 #include "Ray.h"
 
@@ -42,3 +43,6 @@ private:
     vec3 m_U, m_V, m_W;
     float m_LensRadius;
 };
+
+#endif
+

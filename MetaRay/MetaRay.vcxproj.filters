@@ -1287,10 +1287,8 @@
     <ClInclude Include="src\RandomUtil.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Main.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\Shapes.cpp" />
     <ClCompile Include="src\Hittable.cpp" />
+    <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
 </Project>

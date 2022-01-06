@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MATERIAL_H
+#define MATERIAL_H 
 
 #include "Hittable.h"
 
@@ -81,3 +82,5 @@ private:
 public:
     float ir; // Index of Refraction
 };
+
+#endif

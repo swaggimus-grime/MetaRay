@@ -1,4 +1,5 @@
-#pragma once
+#ifndef RAY_H
+#define RAY_H 
 
 #include "Vec3.h"
 #include <glm/glm.hpp>
@@ -17,3 +18,5 @@ struct ray {
 		return origin + t * direction;
 	}
 };
+
+#endif

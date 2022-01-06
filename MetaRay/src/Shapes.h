@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SHAPES_H
+#define SHAPES_H 
 
 #include "Hittable.h" 
 
@@ -12,3 +13,5 @@ private:
 	float m_Radius;
 	std::shared_ptr<Material> m_Mat;
 };
+
+#endif

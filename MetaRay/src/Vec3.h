@@ -1,4 +1,5 @@
-#pragma once
+#ifndef VEC3_H
+#define VEC3_H 
 
 #include <glm/glm.hpp>
 #include <cmath>
@@ -64,3 +65,5 @@ public:
 
 typedef vec3 color;
 typedef vec3 point3;
+
+#endif

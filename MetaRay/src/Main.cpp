@@ -117,6 +117,26 @@ HitList random_scene() {
     return world;
 }
 
+void generate_image(uint32_t width, uint32_t height, Camera& camera, Hittable& hitObj, const uint32_t maxRecursionDepth)
+{
+    std::cout << "P3\n" << width << " " << height << "\n255\n";
+    for (int j = height - 1; j >= 0; --j) {
+        std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
+        for (int i = 0; i < width; ++i) {
+            color pixel_color{};
+            for (int s = 0; s < SAMPLES_PER_PIXEL; ++s) {
+                float u = (i + Random::Float()) / (width - 1);
+                float v = (j + Random::Float()) / (height - 1);
+                ray r = camera.LookAt(u, v);
+                pixel_color = pixel_color + ray_color(r, hitObj, maxRecursionDepth);
+            }
+            write_color(std::cout, pixel_color);
+        }
+    }
+
+    std::cerr << "\nDone.\n";
+}
+
 int main() {
 
     // Image
@@ -142,22 +162,5 @@ int main() {
     Camera cam(lookfrom, lookat, vup, 20, aspect_ratio, aperture, dist_to_focus);
 
     // Render
-
-    std::cout << "P3\n" << image_width << " " << image_height << "\n255\n";
-
-    for (int j = image_height - 1; j >= 0; --j) {
-        std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
-        for (int i = 0; i < image_width; ++i) {
-            color pixel_color;
-            for (int s = 0; s < SAMPLES_PER_PIXEL; ++s) {
-                float u = (i + Random::Float()) / (image_width - 1);
-                float v = (j + Random::Float()) / (image_height - 1);
-                ray r = cam.LookAt(u, v);
-                pixel_color = ray_color(r, world, max_depth);
-            }
-            write_color(std::cout, pixel_color);
-        }
-    }
-
-    std::cerr << "\nDone.\n";
+    generate_image(image_width, image_height, cam, world, max_depth);
 }

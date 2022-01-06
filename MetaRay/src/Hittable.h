@@ -1,4 +1,5 @@
-#pragma once
+#ifndef HITTABLE_H
+#define HITTABLE_H 
 
 #include "Ray.h"
 #include <glm/glm.hpp>
@@ -36,3 +37,5 @@ public:
 public:
     std::vector<std::shared_ptr<Hittable>> m_Objects;
 };
+
+#endif
