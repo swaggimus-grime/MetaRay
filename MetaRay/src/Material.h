@@ -3,6 +3,9 @@
 
 #include "Hittable.h"
 
+#ifdef CUDA_ENABLED
+
+#else
 class Material {
 public:
     virtual bool Scatter (const ray& r_in, const hit_record& rec, 
@@ -82,5 +85,7 @@ private:
 public:
     float ir; // Index of Refraction
 };
+
+#endif
 
 #endif

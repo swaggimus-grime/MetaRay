@@ -33,9 +33,6 @@
     <ClInclude Include="src\Ray.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Vec3.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="vendor\glm\glm\common.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
@@ -1281,14 +1278,22 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Shapes.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\RandomUtil.h" />
+    <ClInclude Include="src\CudaCore.h" />
+    <ClInclude Include="src\Vec3.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Shapes.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Shapes.cpp" />
     <ClCompile Include="src\Hittable.cpp" />
-    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\RandomUtil.cpp" />
+    <ClCompile Include="src\CudaCore.cpp" />
+    <ClCompile Include="src\Shapes.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="src\Main.cu" />
   </ItemGroup>
 </Project>

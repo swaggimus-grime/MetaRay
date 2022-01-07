@@ -2,7 +2,11 @@
 #define CAMERA_H 
 
 #include "Ray.h"
+#include "CudaCore.h"
 
+#ifdef CUDA_ENABLED
+
+#else
 class Camera {
 public:
     Camera(point3 lookfrom, point3 lookat, vec3 vup, 
@@ -24,6 +28,7 @@ public:
         m_LensRadius = aperture / 2.f;
     }
 
+    
     ray LookAt(float s, float t) const {
         vec3 rd = m_LensRadius * vec3::random_in_unit_disk();
         vec3 offset = m_U * rd.x + m_V * rd.y;
@@ -43,6 +48,8 @@ private:
     vec3 m_U, m_V, m_W;
     float m_LensRadius;
 };
+
+#endif
 
 #endif
 
