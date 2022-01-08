@@ -9,10 +9,10 @@
 
 class vec3 {
 public:
-	vec3() = default;
+	CUDA_SHARED vec3() : x(0.f), y(0.f), z(0.f) {}
 	CUDA_SHARED vec3(float x, float y, float z) { this->x = x; this->y = y; this->z = z; }
-	CUDA_SHARED inline float len() const { return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2)); }
-	CUDA_SHARED inline float lensqr() const { return pow(len(), 2); }
+	CUDA_SHARED inline float len() const { return static_cast<float>(sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2))); }
+	CUDA_SHARED inline float lensqr() const { return static_cast<float>(pow(len(), 2)); }
 	CUDA_SHARED inline vec3 unit() const { float l = len(); return vec3(x / l, y / l, z / l); }
 	CUDA_SHARED inline float dot(const vec3& other) const { return x * other.x + y * other.y + z * other.z; }
 	CUDA_SHARED inline vec3 cross(const vec3& other) const {

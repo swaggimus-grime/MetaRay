@@ -9,12 +9,12 @@ struct ray {
 
     ray() = default;
 	
-	__device__ ray(const vec3& origin, const vec3& direction)
+	CUDA_SHARED ray(const vec3& origin, const vec3& direction)
 		: origin(origin), direction(direction)
 	{}
 
 	
-	__device__ vec3 at(float t) const {
+	CUDA_SHARED vec3 at(float t) const {
 		return origin + t * direction;
 	}
 };

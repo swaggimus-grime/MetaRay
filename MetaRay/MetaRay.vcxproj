@@ -11,13 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{43337C0C-B2A9-4F66-B6F3-F3FD3942157D}</ProjectGuid>
+    <ProjectGuid>{F89F061F-647F-85BA-6D97-1091D9F5EB1B}</ProjectGuid>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>MetaRay</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <CudaToolkitCustomDir>
-    </CudaToolkitCustomDir>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -66,18 +64,22 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AssemblerOutput>AssemblyAndSourceCode</AssemblerOutput>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>cudart_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>cudart_static.lib</AdditionalDependencies>
     </Link>
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>
-      <Defines>WIN32</Defines>
-      <CodeGeneration>compute_52,sm_52;%(CodeGeneration)</CodeGeneration>
-      <GenerateRelocatableDeviceCode>true</GenerateRelocatableDeviceCode>
+      <Include>
+      </Include>
+      <CudaRuntime>Static</CudaRuntime>
+      <GenerateRelocatableDeviceCode>false</GenerateRelocatableDeviceCode>
+      <CodeGeneration>compute_52,sm_52</CodeGeneration>
+      <NvccCompilation>compile</NvccCompilation>
+      <GenerateLineInfo>false</GenerateLineInfo>
+      <Runtime>MTd</Runtime>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -528,12 +530,12 @@
     <ClCompile Include="src\CudaCore.cpp" />
     <ClCompile Include="src\Hittable.cpp" />
     <ClCompile Include="src\RandomUtil.cpp" />
-    <ClCompile Include="src\Shapes.cpp">
-      <FileType>Document</FileType>
-    </ClCompile>
+    <ClCompile Include="src\Shapes.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="src\Main.cu" />
+    <CudaCompile Include="src\Main.cu">
+      <FileType>Document</FileType>
+    </CudaCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

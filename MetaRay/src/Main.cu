@@ -5,7 +5,7 @@
 #include "Shapes.h"
 #include "Hittable.h"
 
-__device__ vec3 ray_color(const ray& r, Hittable** world) {
+CUDA_SHARED vec3 ray_color(const ray& r, Hittable** world) {
     hit_record rec;
     if ((*world)->hit(r, 0.0, FLT_MAX, rec)) {
         return 0.5f * vec3(rec.normal.x + 1.0f, rec.normal.y + 1.0f, rec.normal.z + 1.0f);
@@ -32,19 +32,19 @@ __global__ void render(vec3* fb, int max_x, int max_y,
 
 __global__ void create_world(Hittable** d_list, Hittable** d_world) {
     if (threadIdx.x == 0 && blockIdx.x == 0) {
-        Sphere* s = new Sphere(vec3(0.f, 0.f, 0.f), 0.5f);
-        //*(d_list + 1) = new Sphere(vec3(0, -100.5, -1), 100);
-        //*d_world = new HitList(d_list, 2);
+        *(d_list) = new Sphere(vec3(0, 0, -1), 0.5);
+        *(d_list + 1) = new Sphere(vec3(0, -100.5, -1), 100);
+        *d_world = new HitList(d_list, 2);
     }
 }
-//
-//__global__ void free_world(Hittable** d_list, Hittable** d_world) {
-//    delete* (d_list);
-//    delete* (d_list + 1);
-//    delete* d_world;
-//}
 
-/*int main() {
+__global__ void free_world(Hittable** d_list, Hittable** d_world) {
+    delete* (d_list);
+    delete* (d_list + 1);
+    delete* d_world;
+}
+
+int main() {
     int nx = 1200;
     int ny = 600;
     int tx = 8;
@@ -108,10 +108,4 @@ __global__ void create_world(Hittable** d_list, Hittable** d_world) {
 
     // useful for cuda-memcheck --leak-check full
     cudaDeviceReset();
-}
-
-*/
-
-int main() {
-
 }
