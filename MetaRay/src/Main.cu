@@ -1,11 +1,11 @@
 #include <iostream>
-#include <time.h>
-#include <float.h>
 #include "ray.h"
 #include "Shapes.h"
 #include "Hittable.h"
+#include "Framebuffer.h"
+#include "RandomUtil.h"
 
-CUDA_SHARED vec3 ray_color(const ray& r, Hittable** world) {
+__device__ vec3 ray_color(const ray& r, Hittable** world) {
     hit_record rec;
     if ((*world)->hit(r, 0.0, FLT_MAX, rec)) {
         return 0.5f * vec3(rec.normal.x + 1.0f, rec.normal.y + 1.0f, rec.normal.z + 1.0f);
@@ -17,13 +17,14 @@ CUDA_SHARED vec3 ray_color(const ray& r, Hittable** world) {
     }
 }
 
-__global__ void render(vec3* fb, int max_x, int max_y,
+__global__ void render(vec3* fb, uint32_t max_x, uint32_t max_y,
     vec3 lower_left_corner, vec3 horizontal, vec3 vertical, vec3 origin,
-    Hittable** world) {
+    Hittable** world, curandState* rand_state) {
     int i = threadIdx.x + blockIdx.x * blockDim.x;
     int j = threadIdx.y + blockIdx.y * blockDim.y;
     if ((i >= max_x) || (j >= max_y)) return;
     int pixel_index = j * max_x + i;
+    curand_init(1984, pixel_index, 0, &rand_state[pixel_index]);
     float u = float(i) / float(max_x);
     float v = float(j) / float(max_y);
     ray r(origin, lower_left_corner + u * horizontal + v * vertical);
@@ -45,20 +46,22 @@ __global__ void free_world(Hittable** d_list, Hittable** d_world) {
 }
 
 int main() {
-    int nx = 1200;
-    int ny = 600;
-    int tx = 8;
-    int ty = 8;
+    const uint32_t nx = 1200;
+    const uint32_t ny = 600;
+    const uint16_t tx = 8;
+    const uint16_t ty = 8;
 
     std::cerr << "Rendering a " << nx << "x" << ny << " image ";
     std::cerr << "in " << tx << "x" << ty << " blocks.\n";
 
-    int num_pixels = nx * ny;
+    uint32_t num_pixels = nx * ny;
     size_t fb_size = num_pixels * sizeof(vec3);
 
+    curandState* s_rand_state;
+    checkCudaErrors(cudaMalloc((void**)&s_rand_state, num_pixels * sizeof(curandState)));
+
     // allocate FB
-    vec3* fb;
-    checkCudaErrors(cudaMallocManaged((void**)&fb, fb_size));
+    Framebuffer fbo(nx, ny);
 
     // make our world of hitables
     Hittable** d_list;
@@ -74,12 +77,12 @@ int main() {
     // Render our buffer
     dim3 blocks(nx / tx + 1, ny / ty + 1);
     dim3 threads(tx, ty);
-    render << <blocks, threads >> > (fb, nx, ny,
+    render << <blocks, threads >> > (fbo.m_Data, nx, ny,
         vec3(-2.0, -1.0, -1.0),
         vec3(4.0, 0.0, 0.0),
         vec3(0.0, 2.0, 0.0),
         vec3(0.0, 0.0, 0.0),
-        d_world);
+        d_world, s_rand_state);
     checkCudaErrors(cudaGetLastError());
     checkCudaErrors(cudaDeviceSynchronize());
     stop = clock();
@@ -87,16 +90,7 @@ int main() {
     std::cerr << "took " << timer_seconds << " seconds.\n";
 
     // Output FB as Image
-    std::cout << "P3\n" << nx << " " << ny << "\n255\n";
-    for (int j = ny - 1; j >= 0; j--) {
-        for (int i = 0; i < nx; i++) {
-            size_t pixel_index = j * nx + i;
-            int ir = int(255.99 * fb[pixel_index].r);
-            int ig = int(255.99 * fb[pixel_index].g);
-            int ib = int(255.99 * fb[pixel_index].b);
-            std::cout << ir << " " << ig << " " << ib << "\n";
-        }
-    }
+    fbo.Present();
 
     // clean up
     checkCudaErrors(cudaDeviceSynchronize());
@@ -104,7 +98,6 @@ int main() {
     checkCudaErrors(cudaGetLastError());
     checkCudaErrors(cudaFree(d_list));
     checkCudaErrors(cudaFree(d_world));
-    checkCudaErrors(cudaFree(fb));
 
     // useful for cuda-memcheck --leak-check full
     cudaDeviceReset();

@@ -7,8 +7,8 @@
 
 class Sphere : public Hittable {
 public:
-	CUDA_SHARED Sphere(const vec3& center, float radius) { m_Center = center; m_Radius = radius; }
-	CUDA_SHARED virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const
+	__device__ Sphere(const vec3& center, float radius) { m_Center = center; m_Radius = radius; }
+	__device__ virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const
     {
         vec3 oc = r.origin - m_Center;
         float a = r.direction.dot(r.direction);

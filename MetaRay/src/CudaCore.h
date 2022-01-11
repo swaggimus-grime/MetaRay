@@ -3,6 +3,10 @@
 #include <cuda_runtime.h>
 #include <iostream>
 
+#if defined(_WIN32)
+#define DEBUG_BREAK() __debugbreak()
+#endif
+
 #define CUDA_SHARED __host__ __device__
 
 #define checkCudaErrors(val) check_cuda( (val), #val, __FILE__, __LINE__ )

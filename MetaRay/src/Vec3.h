@@ -39,6 +39,14 @@ public:
 	union { float z, b; };
 };
 
+inline std::istream& operator>>(std::istream& is, vec3& t) {
+	return is >> t.x >> t.y >> t.z;
+}
+
+inline std::ostream& operator<<(std::ostream& os, const vec3& t) {
+	return os << t.x << " " << t.y << " " << t.z;
+}
+
 CUDA_SHARED inline vec3 operator+(const vec3& v1, const vec3& v2) { return vec3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z); }
 CUDA_SHARED inline vec3 operator-(const vec3& v1, const vec3& v2) { return vec3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z); }
 CUDA_SHARED inline vec3 operator+(float s, const vec3& v) { return vec3(v.x + s, v.y + s, v.z + s); }

@@ -6,8 +6,8 @@
 struct hit_record {
     vec3 p;
     vec3 normal;
-    float t;
-    bool front_face;
+    float t = 0.f;
+    bool front_face = false;
 #ifndef CUDA_ENABLED
     std::shared_ptr<class Material> mat;
 #endif
@@ -15,16 +15,22 @@ struct hit_record {
 
 class Hittable {
 public:
-    CUDA_SHARED virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const = 0;
+    __device__ virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const = 0;
 };
 
 #ifdef CUDA_ENABLED
 
 class HitList : public Hittable {
 public:
-    CUDA_SHARED HitList() : m_Objects(nullptr), m_Size(0) {}
-    CUDA_SHARED HitList(Hittable** list, int size) { m_Objects = list; m_Size = size; }
-    CUDA_SHARED virtual bool hit(const ray& r, float tmin, float tmax, hit_record& rec) const 
+    HitList() = default;
+    __device__ HitList(Hittable** list, int size) { m_Objects = list; m_Size = size; }
+
+    __device__ void Add(Hittable* object) {
+        *(++m_Objects) = object;
+        m_Size++;
+    }
+    __device__ void Clear() { m_Objects = nullptr; m_Size = 0; }
+    __device__ virtual bool hit(const ray& r, float tmin, float tmax, hit_record& rec) const 
     {
         hit_record temp_rec;
         bool hit_anything = false;
