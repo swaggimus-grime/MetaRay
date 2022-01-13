@@ -2,16 +2,6 @@
 
 #ifdef CUDA_ENABLED
 
-void Random::Init(curandState* rand_state, uint32_t numPixels)
-{
-	checkCudaErrors(cudaMalloc((void**)&rand_state, numPixels * sizeof(curandState)));
-}
-
-CUDA_SHARED void Random::PixelInit(curandState* rand_state, uint32_t pixelIndex)
-{
-	curand_init(1984, pixelIndex, 0, &rand_state[pixelIndex]);
-}
-
 #else
 
 static std::uniform_real_distribution<float> distribution;

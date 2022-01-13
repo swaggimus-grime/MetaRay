@@ -2,7 +2,7 @@
 #define VEC3_H 
 
 #include <cmath>
-#include "RandomUtil.h"
+#include <curand_kernel.h>
 #include "CudaCore.h"
 
 #ifdef CUDA_ENABLED
@@ -33,6 +33,11 @@ public:
 	CUDA_SHARED inline vec3& operator/=(const vec3& other) { x /= other.x, y /= other.y, z /= other.z; return *this; }
 	CUDA_SHARED inline vec3& operator*=(const float s) { x *= s, y *= s, z *= s; return *this; }
 	CUDA_SHARED inline vec3& operator/=(const float s) { x /= s, y /= s, z /= s; return *this; }
+
+	__device__ inline static vec3 random(curandState* randState) {
+		return vec3(curand_uniform(randState), curand_uniform(randState), curand_uniform(randState));
+	}
+
 public:
 	union { float x, r; };
 	union { float y, g; };
@@ -50,12 +55,13 @@ inline std::ostream& operator<<(std::ostream& os, const vec3& t) {
 CUDA_SHARED inline vec3 operator+(const vec3& v1, const vec3& v2) { return vec3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z); }
 CUDA_SHARED inline vec3 operator-(const vec3& v1, const vec3& v2) { return vec3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z); }
 CUDA_SHARED inline vec3 operator+(float s, const vec3& v) { return vec3(v.x + s, v.y + s, v.z + s); }
-CUDA_SHARED inline vec3 operator-(float s, const vec3& v) { return vec3(v.x - s, v.y - s, v.z - s); }
+CUDA_SHARED inline vec3 operator-(const vec3& v, float s) { return vec3(v.x - s, v.y - s, v.z - s); }
 
 CUDA_SHARED inline vec3 operator*(const vec3& v1, const vec3& v2) { return vec3(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z); }
 CUDA_SHARED inline vec3 operator/(const vec3& v1, const vec3& v2) { return vec3(v1.x / v2.x, v1.y / v2.y, v1.z / v2.z); }
 CUDA_SHARED inline vec3 operator*(float s, const vec3& v) { return vec3(v.x * s, v.y * s, v.z * s); }
 CUDA_SHARED inline vec3 operator/(const vec3& v, float s) { return vec3(v.x / s, v.y / s, v.z / s); }
+
 
 #else
 

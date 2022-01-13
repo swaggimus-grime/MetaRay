@@ -78,9 +78,13 @@
       <GenerateRelocatableDeviceCode>false</GenerateRelocatableDeviceCode>
       <CodeGeneration>compute_52,sm_52</CodeGeneration>
       <NvccCompilation>compile</NvccCompilation>
-      <GenerateLineInfo>false</GenerateLineInfo>
+      <GenerateLineInfo>true</GenerateLineInfo>
       <Runtime>MTd</Runtime>
     </CudaCompile>
+    <CudaLink>
+      <PerformDeviceLink>true</PerformDeviceLink>
+      <GPUDebugInfo>true</GPUDebugInfo>
+    </CudaLink>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -107,9 +111,10 @@
     <ClInclude Include="src\CudaCore.h" />
     <ClInclude Include="src\Hittable.h" />
     <ClInclude Include="src\Material.h" />
-    <ClInclude Include="src\RandomUtil.h" />
+    <ClCompile Include="src\RandomUtil.cpp" />
     <ClInclude Include="src\Ray.h" />
     <ClInclude Include="src\Shapes.h" />
+    <ClInclude Include="src\TimeInstrumentation.h" />
     <ClInclude Include="src\Vec3.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
@@ -531,8 +536,11 @@
     <ClCompile Include="src\CudaCore.cpp" />
     <ClCompile Include="src\Hittable.cpp" />
     <ClCompile Include="src\Framebuffer.cpp" />
-    <ClCompile Include="src\RandomUtil.cpp" />
+    <ClInclude Include="src\RandomUtil.h">
+      <FileType>Document</FileType>
+    </ClInclude>
     <ClCompile Include="src\Shapes.cpp" />
+    <ClCompile Include="src\TimeInstrumentation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="src\Main.cu">

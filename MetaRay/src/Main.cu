@@ -3,18 +3,35 @@
 #include "Shapes.h"
 #include "Hittable.h"
 #include "Framebuffer.h"
-#include "RandomUtil.h"
+#include <curand_kernel.h>
+#include "TimeInstrumentation.h"
 
-__device__ vec3 ray_color(const ray& r, Hittable** world) {
-    hit_record rec;
-    if ((*world)->hit(r, 0.0, FLT_MAX, rec)) {
-        return 0.5f * vec3(rec.normal.x + 1.0f, rec.normal.y + 1.0f, rec.normal.z + 1.0f);
+__device__ vec3 random_in_unit_sphere(curandState* randState) {
+    while (true) {
+        vec3 p = 2.f * vec3::random(randState) - 1.f;
+        if (p.lensqr() >= 1) continue;
+        return p;
     }
-    else {
-        vec3 unit_direction = r.direction.unit();
-        float t = 0.5f * unit_direction.y + 1.0f;
-        return (1.0f - t) * vec3(1.0, 1.0, 1.0) + t * vec3(0.5, 0.7, 1.0);
+}
+
+__device__ vec3 ray_color(const ray& r, Hittable** world, curandState* local_rand_state) {
+    ray cur_ray = r;
+    float cur_attenuation = 1.0f;
+    for (int i = 0; i < 50; i++) {
+        hit_record rec;
+        if ((*world)->hit(cur_ray, 0.001f, FLT_MAX, rec)) {
+            vec3 target = rec.p + rec.normal + random_in_unit_sphere(local_rand_state);
+            cur_attenuation *= 0.5f;
+            cur_ray = ray(rec.p, target - rec.p);
+        }
+        else {
+            vec3 unit_direction = cur_ray.direction.unit();
+            float t = 0.5f * (unit_direction.y + 1.0f);
+            vec3 c = (1.0f - t) * vec3(1.0, 1.0, 1.0) + t * vec3(0.5, 0.7, 1.0);
+            return cur_attenuation * c;
+        }
     }
+    return vec3(0.0, 0.0, 0.0); // exceeded recursion
 }
 
 __global__ void render(vec3* fb, uint32_t max_x, uint32_t max_y,
@@ -25,10 +42,13 @@ __global__ void render(vec3* fb, uint32_t max_x, uint32_t max_y,
     if ((i >= max_x) || (j >= max_y)) return;
     int pixel_index = j * max_x + i;
     curand_init(1984, pixel_index, 0, &rand_state[pixel_index]);
-    float u = float(i) / float(max_x);
-    float v = float(j) / float(max_y);
+    float u = float(i + curand_uniform(&rand_state[pixel_index])) / float(max_x);
+    float v = float(j + curand_uniform(&rand_state[pixel_index])) / float(max_y);
     ray r(origin, lower_left_corner + u * horizontal + v * vertical);
-    fb[pixel_index] = ray_color(r, world);
+    fb[pixel_index] = ray_color(r, world, &rand_state[pixel_index]);
+    fb[pixel_index].r = pow(fb[pixel_index].r, 1.f / 2.2f);
+    fb[pixel_index].b = pow(fb[pixel_index].b, 1.f / 2.2f);
+    fb[pixel_index].g = pow(fb[pixel_index].g, 1.f / 2.2f);
 }
 
 __global__ void create_world(Hittable** d_list, Hittable** d_world) {
@@ -72,8 +92,7 @@ int main() {
     checkCudaErrors(cudaGetLastError());
     checkCudaErrors(cudaDeviceSynchronize());
 
-    clock_t start, stop;
-    start = clock();
+    TimeInst::Start();
     // Render our buffer
     dim3 blocks(nx / tx + 1, ny / ty + 1);
     dim3 threads(tx, ty);
@@ -85,9 +104,7 @@ int main() {
         d_world, s_rand_state);
     checkCudaErrors(cudaGetLastError());
     checkCudaErrors(cudaDeviceSynchronize());
-    stop = clock();
-    double timer_seconds = ((double)(stop - start)) / CLOCKS_PER_SEC;
-    std::cerr << "took " << timer_seconds << " seconds.\n";
+    std::cerr << "took " << TimeInst::End() << " seconds.\n";
 
     // Output FB as Image
     fbo.Present();
@@ -101,4 +118,5 @@ int main() {
 
     // useful for cuda-memcheck --leak-check full
     cudaDeviceReset();
+    return 0;
 }

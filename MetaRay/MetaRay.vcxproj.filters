@@ -39,9 +39,6 @@
     <ClInclude Include="src\Material.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\RandomUtil.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\Ray.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -1297,6 +1294,10 @@
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
     <ClInclude Include="src\Framebuffer.h" />
+    <ClInclude Include="src\TimeInstrumentation.h" />
+    <ClInclude Include="src\RandomUtil.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CudaCore.cpp">
@@ -1305,13 +1306,14 @@
     <ClCompile Include="src\Hittable.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\RandomUtil.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\Shapes.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Framebuffer.cpp" />
+    <ClCompile Include="src\TimeInstrumentation.cpp" />
+    <ClCompile Include="src\RandomUtil.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="src\Main.cu" />

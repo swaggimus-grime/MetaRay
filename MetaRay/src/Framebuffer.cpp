@@ -29,7 +29,7 @@ void Framebuffer::Present() const
 
     std::cout << "P3\n" << m_Width << " " << m_Height << "\n255\n";
     for (int j = m_Height - 1; j >= 0; j--) {
-        std::cerr << "\rScanlines remaining: " << j << std::flush;
+        std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
         for (int i = 0; i < m_Width; i++) {
             size_t pixel_index = j * m_Width + i;
             int ir = int(255.99 * m_Data[pixel_index].r);
