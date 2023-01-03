@@ -27,10 +27,22 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Camera.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="src\Hittable.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Material.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RandomUtil.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="src\Ray.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Shapes.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Vec3.h">
@@ -1281,14 +1293,16 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Shapes.h" />
-    <ClInclude Include="src\Camera.h" />
-    <ClInclude Include="src\Material.h" />
-    <ClInclude Include="src\RandomUtil.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Shapes.cpp" />
-    <ClCompile Include="src\Hittable.cpp" />
-    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Hittable.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Shapes.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

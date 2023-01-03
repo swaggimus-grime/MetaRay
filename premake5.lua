@@ -47,11 +47,13 @@ project "MetaRay"
 		systemversion "latest"
 
 	filter "configurations:Debug"
-		defines "MR_DEBUG"
+	        debugargs{">", "image.ppm"}
+		defines {"MR_DEBUG", "_USE_MATH_DEFINES"}
 		runtime "Debug"
 		symbols "on"
 
 	filter "configurations:Release"
-		defines "MR_RELEASE"
+		debugargs{">", "image.ppm"}
+		defines {"MR_RELEASE", "_USE_MATH_DEFINES"}
 		runtime "Release"
 		optimize "on"
