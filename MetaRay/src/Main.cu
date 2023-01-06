@@ -1,12 +1,10 @@
-#include <iostream>
-#include "Ray.h"
-#include <limits>
-#include "Vec3.h"
 #include "Hittable.h"
 #include "Shapes.h"
 #include "Camera.h"
 #include "Material.h"
 #include <math.h>
+#include <iostream>
+#include <limits>
 
 using std::make_shared;
 using std::shared_ptr;

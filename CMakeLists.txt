@@ -6,10 +6,11 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_BUILD_TYPE "Debug")
 
-include(CheckLanguage)
-check_language(CUDA)
+add_compile_definitions(_USE_MATH_DEFINES 
+						GLM_FORCE_CUDA)
 
-project("MetaRay")
+find_package(CUDAToolkit)
+project("MetaRay" LANGUAGES CUDA CXX)
 
 # Include sub-projects.
 find_package(Git QUIET)
@@ -34,7 +35,7 @@ endfunction(add_git_submodule)
 
 add_git_submodule("tools/glm")
 
-add_subdirectory("MetaRay")
 add_subdirectory("tools/glm")
+add_subdirectory("MetaRay")
 
 install(TARGETS MetaRay DESTINATION bin)
