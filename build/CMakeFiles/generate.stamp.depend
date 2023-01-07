@@ -8,11 +8,10 @@ C:/Program Files/CMake/share/cmake-3.22/Modules/CMakeLanguageInformation.cmake
 C:/Program Files/CMake/share/cmake-3.22/Modules/CMakeRCInformation.cmake
 C:/Program Files/CMake/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake
 C:/Program Files/CMake/share/cmake-3.22/Modules/CMakeSystemSpecificInitialize.cmake
-C:/Program Files/CMake/share/cmake-3.22/Modules/CheckLanguage.cmake
 C:/Program Files/CMake/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake
 C:/Program Files/CMake/share/cmake-3.22/Modules/Compiler/MSVC-C.cmake
 C:/Program Files/CMake/share/cmake-3.22/Modules/Compiler/MSVC-CXX.cmake
-C:/Program Files/CMake/share/cmake-3.22/Modules/FindGit.cmake
+C:/Program Files/CMake/share/cmake-3.22/Modules/FindCUDAToolkit.cmake
 C:/Program Files/CMake/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake
 C:/Program Files/CMake/share/cmake-3.22/Modules/FindPackageMessage.cmake
 C:/Program Files/CMake/share/cmake-3.22/Modules/Platform/Windows-MSVC-C.cmake
@@ -25,4 +24,3 @@ C:/Users/hunte/git/MetaRay/build/CMakeFiles/3.22.0-rc2/CMakeCCompiler.cmake
 C:/Users/hunte/git/MetaRay/build/CMakeFiles/3.22.0-rc2/CMakeCXXCompiler.cmake
 C:/Users/hunte/git/MetaRay/build/CMakeFiles/3.22.0-rc2/CMakeRCCompiler.cmake
 C:/Users/hunte/git/MetaRay/build/CMakeFiles/3.22.0-rc2/CMakeSystem.cmake
-C:/Users/hunte/git/MetaRay/build/CMakeFiles/cmake.verify_globs

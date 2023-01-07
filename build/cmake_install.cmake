@@ -37,11 +37,6 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("C:/Users/hunte/git/MetaRay/build/MetaRay/cmake_install.cmake")
 endif()
 
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
-  include("C:/Users/hunte/git/MetaRay/build/tools/glm/cmake_install.cmake")
-endif()
-
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Dd][Ee][Bb][Uu][Gg])$")
     file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "C:/Users/hunte/git/MetaRay/build/MetaRay/Debug/MetaRay.exe")

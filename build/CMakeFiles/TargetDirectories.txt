@@ -3,7 +3,3 @@ C:/Users/hunte/git/MetaRay/build/CMakeFiles/ALL_BUILD.dir
 C:/Users/hunte/git/MetaRay/build/CMakeFiles/ZERO_CHECK.dir
 C:/Users/hunte/git/MetaRay/build/MetaRay/CMakeFiles/MetaRay.dir
 C:/Users/hunte/git/MetaRay/build/MetaRay/CMakeFiles/INSTALL.dir
-C:/Users/hunte/git/MetaRay/build/tools/glm/CMakeFiles/uninstall.dir
-C:/Users/hunte/git/MetaRay/build/tools/glm/CMakeFiles/INSTALL.dir
-C:/Users/hunte/git/MetaRay/build/tools/glm/CMakeFiles/ALL_BUILD.dir
-C:/Users/hunte/git/MetaRay/build/tools/glm/glm/CMakeFiles/INSTALL.dir

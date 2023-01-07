@@ -22,11 +22,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZERO_CHECK", "ZERO_CHECK.vc
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uninstall", "tools\glm\uninstall.vcxproj", "{6E71B91E-54C8-367C-B7D8-BDFD3C3D7A1F}"
-	ProjectSection(ProjectDependencies) = postProject
-		{E10DA9F7-2667-36BA-B457-B5002B293795} = {E10DA9F7-2667-36BA-B457-B5002B293795}
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -63,10 +58,6 @@ Global
 		{E10DA9F7-2667-36BA-B457-B5002B293795}.MinSizeRel|x64.Build.0 = MinSizeRel|x64
 		{E10DA9F7-2667-36BA-B457-B5002B293795}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
 		{E10DA9F7-2667-36BA-B457-B5002B293795}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
-		{6E71B91E-54C8-367C-B7D8-BDFD3C3D7A1F}.Debug|x64.ActiveCfg = Debug|x64
-		{6E71B91E-54C8-367C-B7D8-BDFD3C3D7A1F}.Release|x64.ActiveCfg = Release|x64
-		{6E71B91E-54C8-367C-B7D8-BDFD3C3D7A1F}.MinSizeRel|x64.ActiveCfg = MinSizeRel|x64
-		{6E71B91E-54C8-367C-B7D8-BDFD3C3D7A1F}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {447F164C-1FFA-36FE-9E8D-B4AA7417654F}

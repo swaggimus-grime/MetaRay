@@ -191,7 +191,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\hunte\git\MetaRay\build\tools\glm\ALL_BUILD.vcxproj">
+    <ProjectReference Include="C:\Users\hunte\git\MetaRay\build\ALL_BUILD.vcxproj">
       <Project>{6C837B47-BFFF-3128-8CF0-6A4C26874EE2}</Project>
       <Name>ALL_BUILD</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

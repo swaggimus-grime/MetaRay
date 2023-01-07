@@ -1,41 +1,20 @@
 # CMakeList.txt : Top-level CMake project file, do global configuration
 # and include sub-projects here.
 #
-cmake_minimum_required (VERSION 3.22)
-set(CMAKE_CXX_STANDARD 17)
+cmake_minimum_required(VERSION 3.18)
 
 set(CMAKE_BUILD_TYPE "Debug")
+set(CMAKE_CXX_STANDARD 17)
 
-add_compile_definitions(_USE_MATH_DEFINES 
-						GLM_FORCE_CUDA)
+add_compile_definitions(_USE_MATH_DEFINES)
 
-find_package(CUDAToolkit)
-project("MetaRay" LANGUAGES CUDA CXX)
-
-# Include sub-projects.
-find_package(Git QUIET)
-if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
-    option(GIT_SUBMODULE "Check submodules during build" ON)
-    if(NOT GIT_SUBMODULE)
-        message(FATAL_ERROR "Failed to turn on GIT_SUBMODULE")
-    endif()
-endif()
+project("MetaRay" LANGUAGES C CXX CUDA)
+set(CMAKE_CUDA_STANDARD 17)
+set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 
 message(STATUS "Working directory: ${PROJECT_SOURCE_DIR}")
+message(STATUS "CUDA STANDARD: ${CMAKE_CUDA_STANDARD}")
 
-function(add_git_submodule dir)
-    message(STATUS "Submodule update ${dir}")
-    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive ${dir}
-                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-                    RESULT_VARIABLE GIT_SUBMOD_RESULT)
-    if(NOT GIT_SUBMOD_RESULT EQUAL "0")
-        message(FATAL_ERROR "git submodule update --init --recursive ${dir} failed with ${GIT_SUBMOD_RESULT}")
-    endif()
-endfunction(add_git_submodule)
-
-add_git_submodule("tools/glm")
-
-add_subdirectory("tools/glm")
 add_subdirectory("MetaRay")
 
 install(TARGETS MetaRay DESTINATION bin)
