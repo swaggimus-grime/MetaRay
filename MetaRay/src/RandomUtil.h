@@ -1,20 +1,18 @@
 #ifndef RANDOM_UTIL_H
 #define RANDOM_UTIL_H 
 
-#include <random>
+#include "Cuda.h"
+#include <curand_kernel.h>
 
 class Random {
 public:
-    static inline float Float() {
-        static std::uniform_real_distribution<float> distribution(0.f, 1.f);
-        static std::mt19937 generator;
-        return distribution(generator);
+    __device__ static inline float Float(curandState* local_rand_state) {
+        return curand_uniform(local_rand_state);
     }
 
-    static inline float Float(float min, float max) {
-        static std::uniform_real_distribution<float> distribution(min, max);
-        static std::mt19937 generator;
-        return distribution(generator);
+    __device__ static inline float Float(curandState* local_rand_state, float min, float max) {
+        float myrandf = curand_uniform(local_rand_state);
+        return myrandf;
     }
 };
 
