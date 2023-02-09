@@ -12,6 +12,8 @@ public:
 
     __device__ static inline float Float(curandState* local_rand_state, float min, float max) {
         float myrandf = curand_uniform(local_rand_state);
+        myrandf *= (max - min + 0.999999);
+        myrandf += min;
         return myrandf;
     }
 };

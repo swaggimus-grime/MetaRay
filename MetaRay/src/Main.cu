@@ -9,6 +9,10 @@
 #include "Camera.h"
 #include "Material.h"
 #include <fstream>
+#include <thread>
+#include <future>
+#include <sstream>
+#include <queue>
 
 __device__ vec3 ray_color(const ray& r, Hittable** world, curandState* local_rand_state) {
     ray cur_ray = r;
@@ -130,11 +134,11 @@ __global__ void free_world(Hittable** d_list, Hittable** d_world, Camera** d_cam
 }
 
 int main() {
-    int nx = 1200;
-    int ny = 800;
-    int ns = 10;
-    int tx = 8;
-    int ty = 8;
+    int nx = 1920;
+    int ny = 1080;
+    int ns = 100;
+    int tx = 16;
+    int ty = 16;
 
     std::cerr << "Rendering a " << nx << "x" << ny << " image with " << ns << " samples per pixel ";
     std::cerr << "in " << tx << "x" << ty << " blocks.\n";
@@ -185,17 +189,44 @@ int main() {
     std::cerr << "took " << timer_seconds << " seconds.\n";
 
     // Output FB as Image
-    std::ofstream img;
+    std::fstream img;
     img.open("image.ppm");
     img << "P3\n" << nx << " " << ny << "\n255\n";
-    for (int j = ny - 1; j >= 0; j--) {
-        for (int i = 0; i < nx; i++) {
-            size_t pixel_index = j * nx + i;
-            int ir = int(255.99 * fb[pixel_index].r);
-            int ig = int(255.99 * fb[pixel_index].g);
-            int ib = int(255.99 * fb[pixel_index].b);
-            img << ir << " " << ig << " " << ib << "\n";
-        }
+
+    auto to_string = [&nx, &fb](int beg, int end) {
+        std::stringstream ss;
+
+        for (; end >= beg; end--)
+            for (int i = 0; i < nx; i++) {
+                size_t pixel_index = end * nx + i;
+                int ir = int(255.99 * fb[pixel_index].r);
+                int ig = int(255.99 * fb[pixel_index].g);
+                int ib = int(255.99 * fb[pixel_index].b);
+                ss << ir << " " << ig << " " << ib << "\n";
+            }
+
+        return ss;
+    };
+
+    int num_workers = 4;
+    float linesPerWorker = ny / num_workers;
+    float leftoverLines = ny % num_workers;
+    float end = std::roundf(linesPerWorker);
+    std::stringstream ss;
+    int begIdx = linesPerWorker * (num_workers - 1);
+    float endIdx = begIdx + linesPerWorker - 1 + leftoverLines;
+    std::queue<std::future<std::stringstream>> workers;
+    for (int i = 0; i < num_workers; i++) {
+        workers.push(std::async(to_string, begIdx, endIdx));
+        endIdx = begIdx - 1;
+        begIdx -= linesPerWorker;
+    }
+
+    for (int i = 0; i < num_workers; i++) {
+        auto& w = workers.front();
+        w.wait();
+        img << w.get().str();
+        workers.pop();
     }
     img.close();
 
