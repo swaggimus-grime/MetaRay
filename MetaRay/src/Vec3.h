@@ -8,7 +8,8 @@
 
 class vec3 {
 public:
-	vec3() = default;
+	CUDA_SHARED vec3(float s) : x(s), y(s), z(s) {}
+	CUDA_SHARED vec3() :vec3(0.f) {}
 	CUDA_SHARED vec3(float x, float y, float z) { this->x = x; this->y = y; this->z = z; }
 	CUDA_SHARED inline float len() const { return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2)); }
 	CUDA_SHARED inline float lensqr() const { return pow(len(), 2); }
